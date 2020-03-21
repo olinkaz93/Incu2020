@@ -1,0 +1,9 @@
+Switch1:
+
+   int g1/0, “Connected to the switch2 gi1/2”, up
+
+   int fc1/1/0, “connected to the storage port 1”, up
+
+Switch2:
+
+   int GigabitEthernet1/0/3, “Connected to printer CX2”, up
