@@ -2,7 +2,7 @@ def getInterfaces():
 
     try:
         file = open(
-            r"C:\Users\Ola\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Python 3.8\mongo_flask_homework\text\interface2.txt",
+            r"text\interface2.txt",
             "rt", encoding="utf8")
         #dictionary = {}
         #ln = 0
