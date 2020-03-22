@@ -21,7 +21,8 @@ mongo = PyMongo(app)
 schema = {
     "type": "object",
     "properties": {
-        "Description": {"type": "string"},
+        "Description": {"type": "string",
+                        "pattern": "Connected"},
         "State": {"type": "string",
                   "minLength": 2,
                   "maxLength": 4
