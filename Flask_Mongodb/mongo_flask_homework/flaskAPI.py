@@ -22,12 +22,15 @@ schema = {
     "type": "object",
     "properties": {
         "Description": {"type": "string",
-                        "pattern": "Connected"},
+                        "pattern": "\A[cC]onnected"},
         "State": {"type": "string",
-                  "minLength": 2,
-                  "maxLength": 4
+                  "pattern": "\A[Uu]p$|\A[Dd]own$"
                  },
-
+        "Switch_Type": {"type": "string",
+                        "pattern": "\ASwitch[\s][\d]$"
+                        },
+        "Interface_Name": {"type": "string",
+                           "pattern": "\Aint .+[\d][\/][\d]$|\Aint .+[\d][\/][\d][\/][\d]$"}
     },
 }
 
@@ -134,10 +137,16 @@ def patch_interface_description(switch_name, _id):
         validate(instance=payload, schema=schema)
     except jsonschema.ValidationError as e:
         print(e.message)
+        e.message = """
+        Description: Connected........... 
+        State: Up, up, Down or down
+        Switch_Type: Switch x, where x - indicates the number, e.g. Switch 3
+        Interface_Name: e.g. int g1/2 or int GigabitEthernet1/0/1
+        """
         return "Please insert correct payload!"+" "+e.message, 500
     except jsonschema.SchemaError as e:
         print(e)
-        return "Please insert correct payload!"+" "+e, 500
+        return "Please insert correct payload!"+" "+e.message, 500
     #return payload
     if payload:
         result = mongo.db.Interfaces.find_one_and_update(
@@ -150,5 +159,5 @@ def patch_interface_description(switch_name, _id):
     return "Error!", 500
 
 
-if __name__ == '__main__' :
+if __name__ == '__main__':
     app.run(debug = True)
