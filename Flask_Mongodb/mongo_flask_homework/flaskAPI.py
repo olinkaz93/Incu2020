@@ -3,6 +3,8 @@ from flask_pymongo import PyMongo
 from pymongo import ReturnDocument, MongoClient
 from bson import json_util, ObjectId
 from config import url
+from jsonschema import validate, ValidationError, SchemaError
+import jsonschema
 import jinja2
 
 app = Flask(__name__)
@@ -15,6 +17,18 @@ json.dumps = json_util.dumps
 
 #linking my flask app with PyMongo and creates the handler 'mongo'
 mongo = PyMongo(app)
+
+schema = {
+    "type": "object",
+    "properties": {
+        "Description": {"type": "string"},
+        "State": {"type": "string",
+                  "minLength": 2,
+                  "maxLength": 4
+                 },
+
+    },
+}
 
 # '@' Python decorator, refers to the same app. app.route takes hello function as a parameter and creates the route for the root '/'
 #@app.route('/', defaults={'switch_name': 'How are you?'})
@@ -114,6 +128,15 @@ def patch_interface_description(switch_name, _id):
 
     payload = request.get_json()
 
+    #return schema
+    try:
+        validate(instance=payload, schema=schema)
+    except jsonschema.ValidationError as e:
+        print(e.message)
+        return "Please insert correct payload!"+" "+e.message, 500
+    except jsonschema.SchemaError as e:
+        print(e)
+        return "Please insert correct payload!"+" "+e, 500
     #return payload
     if payload:
         result = mongo.db.Interfaces.find_one_and_update(
