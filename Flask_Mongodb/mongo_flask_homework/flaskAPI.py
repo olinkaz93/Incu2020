@@ -102,7 +102,7 @@ def get_interface_xyz_detail_HTML(switch_name, g, x, y):
     result = mongo.db.Interfaces.find(mongo_filter)
     return render_template('details.html', result=result, interface_name=interface)
 
-@app.route('/<switch_name>/<g>/<x>/interfaces.json', methods=["GET"])
+@app.route('/<switch_name>/<g>/<x>/details.json', methods=["GET"])
 def getInterfaces_xy_detail_JSON(switch_name, g, x):
 
     interface = 'int ' + g + '/' + x
@@ -110,7 +110,7 @@ def getInterfaces_xy_detail_JSON(switch_name, g, x):
     result = mongo.db.Interfaces.find(mongo_filter)
     return jsonify(result)
 
-@app.route('/<switch_name>/<g>/<x>/<y>/interfaces.json', methods=["GET"])
+@app.route('/<switch_name>/<g>/<x>/<y>/details.json', methods=["GET"])
 def get_interface_xyz_detail_JSON(switch_name, g, x, y):
 
     interface = 'int ' + g + '/' + x + '/' + y

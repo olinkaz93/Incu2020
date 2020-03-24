@@ -2,7 +2,7 @@ def getInterfaces():
 
     try:
         file = open(
-            r"text\interface2.txt",
+            r"text\interface.txt",
             "rt", encoding="utf8")
         #dictionary = {}
         #ln = 0
