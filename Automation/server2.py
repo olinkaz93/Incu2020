@@ -45,6 +45,26 @@ def getVersion(node):
     except:
         print("Unable to get this node version")
 
+def changeHostname(node):
+    device_connection = connect(node)
+
+    configure_hostname = '''
+            <configure xmlns="http://www.cisco.com/nxos:1.0">
+                <__XML__MODE__exec_configure>
+                    <hostname>
+                        <name>MyDevice</name>
+                    </hostname>
+                </__XML__MODE__exec_configure>
+            </configure>
+	'''
+
+    try:
+        netconf_output = device_connection.get(('subtree', configure_hostname))
+        print(netconf_output)
+        return "Hostname: "+str(hostname[0].firstChild.nodeValue)
+    except:
+        print("Unable to change hostname.")
+
 
 def Main():
     host = "127.0.0.1"
@@ -63,8 +83,7 @@ def Main():
         elif message == "show version":
                 message = getVersion(node)
         elif message == "change hostname":
-                newHostname = input("Enter your new hostname: ")
-                change(node, newHostname)
+                message = changeHostname(node)
         else:
                 message = "I do not understand"
         conn.send(message.encode())
